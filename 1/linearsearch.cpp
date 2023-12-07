@@ -29,6 +29,18 @@ void printVector(const std::vector<int>& inputVec)
     std::cout << std:: endl;
 };
 
+bool searchVector(int enteredNumber, std::vector<int>& inputVec);
+bool searchVector(int enteredNumber,  std::vector<int>&inputVec)
+{
+    for (int i =0; i<inputVec.size();i++)
+    {
+        if(enteredNumber == inputVec[i])
+        {
+            return true;
+        }
+    };
+    return false;
+}
 
 int main()
 {
@@ -37,5 +49,16 @@ int main()
     fillVector(myVec);
     printVector(myVec);
     
+    int enteredNumber = 0;
+    cin >> enteredNumber;
+    
+    if(searchVector(enteredNumber, myVec) == true)
+    {
+        std::cout << "number already exists ! " << std::endl;
+    }
+    else
+    {
+        std::cout << "number was not typed in before ! " << std::endl;
+    };
     return 0;
 }
