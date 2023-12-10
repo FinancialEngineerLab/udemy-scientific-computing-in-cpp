@@ -30,28 +30,35 @@ void printVector(const std::vector<int>& newMyVector)
     }
     std::cout << std::endl;
 };
-
 void sortVector(std::vector<int>& newMyVector)
 {
     int minI, minE = 0;
-    for (int i = 0; i<newMyVector.size() - 1; i++)
+    // Outer loop iterates over each element in the vector, except the last one.
+    for (int i = 0; i < newMyVector.size() - 1; i++)
     {
         minE = newMyVector[i]; 
         minI = i;
-        for(int j = i + 1; j<newMyVector.size(); j++)
+        
+        // Inner loop iterates over the remaining elements to find the minimum.
+        for (int j = i + 1; j < newMyVector.size(); j++)
         {
+            // If a smaller element is found, update minE and minI.
             if (newMyVector[j] < minE)
             {
                 minE = newMyVector[j];
                 minI = j;
-            };
-        };
+            }
+        }
+        
+        // Swap the current element with the minimum element found in the inner loop.
         int temp = newMyVector[i];
         newMyVector[i] = minE;
         newMyVector[minI] = temp;
     }
+    
+    // Print the sorted vector.
     printVector(newMyVector);
-};
+}
 
 
 bool binarySearchAlgorithm(int enteredNumber, const std::vector<int>& newMyVector)
