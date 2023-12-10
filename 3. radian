@@ -1,0 +1,26 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+const double pi = 3.141592;
+
+float radian(float degree)
+{
+    float r  =0.0f;
+    r = degree * pi / 180.0;
+    return r;
+};
+
+int main()
+{
+    float r = 0.0f;
+    std::cout << "conversion of 1 - 360 degrees to radians " << std::endl;
+    
+    for (int i = 1;i<=360; i++)
+    {
+        r = radian(i);
+        std::cout << i << " degree equals to " << setprecision(6) << fixed << r << " radians\n";
+    };
+    return 0;
+};
