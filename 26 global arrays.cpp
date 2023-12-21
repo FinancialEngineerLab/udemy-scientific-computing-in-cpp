@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-const int CAPCAITY = 30;
+const int CAPACITY = 30;
 
 using namespace std;
 
@@ -152,7 +152,7 @@ void editStudent()
                     std::cout << studentScore[arrIndex] << std::endl;
                     cin.ignore();
                     std::cout << "enter new score ";
-                    getline(cin, studentScore[arrIndex]);
+                    cin >> studentScore[arrIndex];
                     break;
                 case 4:
                     std::cout << "exit " << std::endl;
