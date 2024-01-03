@@ -1,0 +1,161 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <cassert>
+
+#ifndef regression_HPP
+#define regression_HPP
+
+using namespace sd;
+
+typedef vector<double> array;
+
+class regression
+{
+    protected:
+        array x, y;
+        int n;
+        double a, b;
+        // sum of squared deviation
+        double sx2, sy2, sxy;
+    
+    public:
+        regression()
+        {
+            n = 0;
+            a = b = sx2 = sy2= sxy = 0.0;
+        };
+        virtual void input(), output();
+        bool coefficients();
+        void correlation();
+};
+
+void regression::input()
+{
+    ifstream myFile("C:\\Temp\\linear.txt", ios::in);
+    if(myFile.fail())
+    {
+        std::cout << "file could not be opened ! " << std::endl;
+        exit(1);
+    }
+    else
+    {
+        double x1, y1;
+        while (myFile >> x1 >> y1)
+        {
+            x.push_back(x1);
+            y.push_back(y1);
+        }
+        n = x.size();
+        std::cout << n << " pair of variates were read in successfully ! " << std::endl;
+    }
+    myFile.close();
+};
+
+void regression::output()
+{
+    std::cout << "Linear : y = a + b*x" << std::endl;
+    std::cout << " a= " << a << "b= " << b << std::endl;
+    std::cout << fixed <<setw(6) << "x" << setw(10) << "y" << setw(10)
+              << "y_calc" << std::endl;
+              
+    for(int i =0; i<x.size(); i++)
+    {
+        std::cout << setw(6) << setprecicsion(2) << x[i]
+                  << setw(10) << setprecicsion(2) << y[i]
+                  << setw(12) << setprecicsion(6) << (a+b*x[i]) << std::endl;
+    };
+};
+
+bool regression::coefficients()
+{
+    double sx, sy, mean_x, mean_y;
+    sx = sy = mean_x = mean_y = 0.0;
+    
+    // sum //
+    sx = accumulate(x.begin(), x.end(), sx);
+    sy = accumulate(y.begin(), y.end(), sy);
+    
+    // mean //
+    mean_x = sx / n;
+    mean_y = sy / n;
+    
+    // inner product //
+    sx2 = inner_product(x.begin(), x.end(), x.begin(), sx2);
+    sy2 = inner_product(y.begin(), y.end(), y.begin(), sy2);
+    
+    sxy = inner_product(x.begin(), x.end(), y.begin(), sxy);
+    
+    double denominator = n *sx2 - sx * sx;
+    
+    if(denominator != 0.0)
+    {
+        b = (n * sxy - sx * sy) / denominator;
+        a = mean_y - mean_x;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+};
+
+void regression::correlation()
+{
+    double corrleationCoefficient = sxy / std::sqrt(sx2*sy2);
+    std::cout << " corr " >> corrleationCoefficient << std::endl;
+}
+
+class exponential:  public regression
+{
+    public:
+        exponential():regression() { }
+        void input(), output();
+}
+
+
+void exponential::input()
+{
+    ifstream myFile("C:\\Temp\\exponential.txt", ios::in);
+    if(myFile.fail())
+    {
+        std::cout << "file could not be opened ! " << std::endl;
+        exit(1);
+    }
+    else
+    {
+        double x1, y1;
+        while (myFile >> x1 >> y1)
+        {
+            assert(y1 > 0);
+            y1 = log(y1);
+            x.push_back(x1);
+            y.push_back(y1);
+        }
+        n = x.size();
+        std::cout << n << " pair of variates were read in successfully ! " << std::endl;
+    }
+    myFile.close();
+};
+
+void exponential::output()
+{
+    std::cout << "Exponential y = a* exp(b*x)" << std::endl;
+    std::cout << " ln(a) = " << a << "b= " << b << std::endl;
+    std::cout << fixed <<setw(6) << "x" << setw(10) << "y" << setw(10)
+              << "y_calc" << std::endl;
+              
+    for(int i =0; i<x.size(); i++)
+    {
+        std::cout << setw(6) << setprecicsion(2) << x[i]
+                  << setw(10) << setprecicsion(2) <<exp(y[i])
+                  << setw(12) << setprecicsion(6) << exp(a+b*x[i]) << std::endl;
+    };
+};
+
+
+
+#endif 
